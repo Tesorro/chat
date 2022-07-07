@@ -1,22 +1,23 @@
 const express = require('express');
 
 const app = express();
-
-const rooms = {
-  rooms: [],
-  messages: ['Hello']
-};
+const server = require('http').Server(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
+const rooms = new Map();
 
 app.get('/rooms', (req, res) => {
-  console.log('Hello');
-  res.json(rooms)
+  res.json(rooms);
 });
 
-app.get('/', () => {
-  console.log('world');
+io.on('connection', socket => { 
+  console.log('user connetcted', socket.id);
 })
 
-app.listen(9999, (err) => {
+server.listen(9999, (err) => {
   if (err) {
     throw Error(err);
   }
